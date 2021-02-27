@@ -7,6 +7,7 @@
 Simplified naive implementation
 
 ```C#
+var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 handlerMock.Protected().Setup<Task<HttpResponseMessage>>(
      "SendAsync",
      ItExpr.Is<HttpRequestMessage>(a => a.Method.ToString() == "GET" && a.RequestUri!.ToString() == uri),
