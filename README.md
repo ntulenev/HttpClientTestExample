@@ -1,6 +1,6 @@
 # HttpClient Test example
 
-### HttpClient process requests via implementation of abstract class HttpMessageHandler.
+### HttpClient handles requests via implementation of abstract class HttpMessageHandler.
 
 #### It can be easily changed with stub for tests.
 
