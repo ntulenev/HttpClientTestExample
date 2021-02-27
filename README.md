@@ -54,8 +54,8 @@ public async Task CanReadContentWithValidParamsAsync()
     var handler = new MockHttpMessageHandler(testString, "GET", uri);
     var client = new HttpClient(handler);
     var testClass = new ClassForTest(client);
-
     var result = 0;
+    
     // Act
     var exception = await Record.ExceptionAsync(
         async () => result = await testClass.GetContentLengthAsync(uri, CancellationToken.None));
