@@ -8,45 +8,14 @@ using FluentAssertions;
 using Xunit;
 
 using HttpClientTestExample;
+
 using Moq;
+using Moq.Protected;
 
 namespace HttpClientExample.Tests
 {
     public class ExampleTests
     {
-        /// <summary>
-        /// HttpMessageHandler mock
-        /// </summary>
-        public class MockHttpMessageHandler : HttpMessageHandler
-        {
-            public MockHttpMessageHandler(string content, string method, string uri)
-            {
-                _content = content;
-                _method = method;
-                _uri = uri;
-            }
-
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-                                                                   CancellationToken cancellationToken)
-            {
-                if (request.RequestUri!.ToString() == _uri && request.Method.ToString() == _method)
-                {
-                    return Task.FromResult(new HttpResponseMessage
-                    {
-                        Content = new StringContent(_content)
-                    });
-                }
-                else
-                {
-                    throw new InvalidOperationException("Invalid params");
-                }
-            }
-
-            private readonly string _content;
-            private readonly string _uri;
-            private readonly string _method;
-        }
-
         [Fact(DisplayName = "Request should return correct content length.")]
         [Trait("Category", "Unit")]
         public async Task CanReadContentWithValidParamsAsync()
@@ -54,8 +23,19 @@ namespace HttpClientExample.Tests
             // Arrange
             var testString = "test123";
             var uri = "https://www.test.com/";
-            var handler = new MockHttpMessageHandler(testString, "GET", uri);
-            var client = new HttpClient(handler);
+
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock.Protected().Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(a => a.Method.ToString() == "GET" && a.RequestUri!.ToString() == uri),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+               .ReturnsAsync(new HttpResponseMessage
+               {
+                   Content = new StringContent(testString)
+               });
+
+            var client = new HttpClient(handlerMock.Object);
             var testClass = new ClassForTest(client);
             var result = 0;
 
