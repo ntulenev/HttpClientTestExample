@@ -44,7 +44,7 @@ public class MockHttpMessageHandler : HttpMessageHandler
 Test example 
 
 ```C#
-[Fact(DisplayName = "Web request should return correct content length.")]
+[Fact(DisplayName = "Request should return correct content length.")]
 [Trait("Category", "Unit")]
 public async Task CanReadContentWithValidParamsAsync()
 {
@@ -63,6 +63,5 @@ public async Task CanReadContentWithValidParamsAsync()
     // Assert
     exception.Should().BeNull();
     result.Should().Be(testString.Length);
-
 }
 ```
