@@ -2,7 +2,7 @@
 
 ### HttpClient process requests via implementation of abstract class HttpMessageHandler.
 
-#### It can be easily changed on stub for tests.
+#### It can be easily changed with stub for tests.
 
 Simplified naive implementation
 
@@ -41,7 +41,8 @@ public class MockHttpMessageHandler : HttpMessageHandler
 }
 ```
 
-Using in test
+Test example 
+
 ```C#
 [Fact(DisplayName = "Web request should return correct content length.")]
 [Trait("Category", "Unit")]
