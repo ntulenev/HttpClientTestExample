@@ -1,5 +1,7 @@
 using System;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -7,8 +9,6 @@ using Xunit;
 
 using HttpClientTestExample;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HttpClientExample.Tests
 {
@@ -47,7 +47,7 @@ namespace HttpClientExample.Tests
             private readonly string _method;
         }
 
-        [Fact(DisplayName = "Web request should return correct content length.")]
+        [Fact(DisplayName = "Request should return correct content length.")]
         [Trait("Category", "Unit")]
         public async Task CanReadContentWithValidParamsAsync()
         {
@@ -66,7 +66,6 @@ namespace HttpClientExample.Tests
             // Assert
             exception.Should().BeNull();
             result.Should().Be(testString.Length);
-
         }
 
         [Fact(DisplayName = "ClassForTest can't be constructed with null HttpClient.")]
