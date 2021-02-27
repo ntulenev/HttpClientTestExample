@@ -7,38 +7,16 @@
 Simplified naive implementation
 
 ```C#
-/// <summary>
-/// HttpMessageHandler mock
-/// </summary>
-public class MockHttpMessageHandler : HttpMessageHandler
+var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+handlerMock.Protected().Setup<Task<HttpResponseMessage>>(
+     "SendAsync",
+     ItExpr.Is<HttpRequestMessage>(a => a.Method.ToString() == "GET" && a.RequestUri!.ToString() == uri),
+     ItExpr.IsAny<CancellationToken>()
+ )
+.ReturnsAsync(new HttpResponseMessage
 {
-    public MockHttpMessageHandler(string content, string method, string uri)
-    {
-        _content = content;
-        _method = method;
-        _uri = uri;
-    }
-
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-                                                           CancellationToken cancellationToken
-    {
-        if (request.RequestUri!.ToString() == _uri && request.Method.ToString() == _method)
-        {
-            return Task.FromResult(new HttpResponseMessage
-            {
-                Content = new StringContent(_content)
-            });
-        }
-        else
-        {
-            throw new InvalidOperationException("Invalid params");
-        }
-    }
-
-    private readonly string _content;
-    private readonly string _uri;
-    private readonly string _method;
-}
+    Content = new StringContent(testString)
+});
 ```
 
 Test example 
@@ -51,11 +29,22 @@ public async Task CanReadContentWithValidParamsAsync()
     // Arrange
     var testString = "test123";
     var uri = "https://www.test.com/";
-    var handler = new MockHttpMessageHandler(testString, "GET", uri);
-    var client = new HttpClient(handler);
-    var testClass = new ClassForTest(client);
 
+    var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+    handlerMock.Protected().Setup<Task<HttpResponseMessage>>(
+            "SendAsync",
+            ItExpr.Is<HttpRequestMessage>(a => a.Method.ToString() == "GET" && a.RequestUri!.ToString() == uri),
+            ItExpr.IsAny<CancellationToken>()
+        )
+       .ReturnsAsync(new HttpResponseMessage
+       {
+           Content = new StringContent(testString)
+       });
+
+    var client = new HttpClient(handlerMock.Object);
+    var testClass = new ClassForTest(client);
     var result = 0;
+
     // Act
     var exception = await Record.ExceptionAsync(
         async () => result = await testClass.GetContentLengthAsync(uri, CancellationToken.None));
