@@ -1,9 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace HttpClientTestExample
+﻿namespace HttpClientTestExample
 {
     /// <summary>
     /// Class for example of test with mocking of http client.
