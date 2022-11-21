@@ -63,8 +63,8 @@ public class ExampleTests
     public void CanBeConstructedValidClient()
     {
         // Arrange
-        var handlerMoq = new Mock<HttpMessageHandler>();
-        HttpClient client = new HttpClient(handlerMoq.Object);
+        var handlerMoq = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        var client = new HttpClient(handlerMoq.Object);
 
         // Act
         var exception = Record.Exception(
@@ -79,8 +79,8 @@ public class ExampleTests
     public async Task CantSendMessageOnNullUriAsync()
     {
         // Arrange
-        var handlerMoq = new Mock<HttpMessageHandler>();
-        HttpClient client = new HttpClient(handlerMoq.Object);
+        var handlerMoq = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
         string uri = null!;
 
@@ -97,8 +97,8 @@ public class ExampleTests
     public async Task CantSendMessageOnEmptyUriAsync()
     {
         // Arrange
-        var handlerMoq = new Mock<HttpMessageHandler>();
-        HttpClient client = new HttpClient(handlerMoq.Object);
+        var handlerMoq = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
         string uri = string.Empty;
 
@@ -115,8 +115,8 @@ public class ExampleTests
     public async Task CantSendMessageOnAllWhitespacesUriAsync()
     {
         // Arrange
-        var handlerMoq = new Mock<HttpMessageHandler>();
-        HttpClient client = new HttpClient(handlerMoq.Object);
+        var handlerMoq = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
         string uri = "     ";
 
