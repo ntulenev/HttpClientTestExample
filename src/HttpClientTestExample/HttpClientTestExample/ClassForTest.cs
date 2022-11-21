@@ -5,6 +5,11 @@
 /// </summary>
 public class ClassForTest
 {
+    /// <summary>
+    /// Creates <see cref="ClassForTest"/>
+    /// </summary>
+    /// <param name="httpClient">Http client for test.</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public ClassForTest(HttpClient httpClient)
     {
         _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
