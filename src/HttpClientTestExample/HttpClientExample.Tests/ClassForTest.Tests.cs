@@ -18,6 +18,7 @@ public class ExampleTests
         // Arrange
         var testString = "test123";
         var uri = "https://www.test.com/";
+        using var cts = new CancellationTokenSource();
 
         var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
         handlerMock.Protected().Setup<Task<HttpResponseMessage>>(
@@ -36,7 +37,7 @@ public class ExampleTests
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => result = await testClass.GetContentLengthAsync(uri, CancellationToken.None));
+            async () => result = await testClass.GetContentLengthAsync(uri, cts.Token));
 
         // Assert
         exception.Should().BeNull();
@@ -83,10 +84,11 @@ public class ExampleTests
         var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
         string uri = null!;
+        using var cts = new CancellationTokenSource();
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => await testClass.GetContentLengthAsync(uri, CancellationToken.None));
+            async () => await testClass.GetContentLengthAsync(uri, cts.Token));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -101,10 +103,11 @@ public class ExampleTests
         var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
         string uri = string.Empty;
+        using var cts = new CancellationTokenSource();
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => await testClass.GetContentLengthAsync(uri, CancellationToken.None));
+            async () => await testClass.GetContentLengthAsync(uri, cts.Token));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -118,11 +121,12 @@ public class ExampleTests
         var handlerMoq = new Mock<HttpMessageHandler>(MockBehavior.Strict);
         var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
+        using var cts = new CancellationTokenSource();
         string uri = "     ";
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => await testClass.GetContentLengthAsync(uri, CancellationToken.None));
+            async () => await testClass.GetContentLengthAsync(uri, cts.Token));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
