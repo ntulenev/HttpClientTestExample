@@ -1,4 +1,4 @@
-﻿namespace HttpClientTestExample;
+namespace HttpClientTestExample;
 
 /// <summary>
 /// Class for example of test with mocking of http client.
@@ -33,7 +33,7 @@ public class ClassForTest
             throw new ArgumentException("Uri can't contains only whitespaces.", nameof(uri));
         }
 
-        var data = await _client.GetStringAsync(uri, ct);
+        var data = await _client.GetStringAsync(uri, ct).ConfigureAwait(false);
 
         return data.Length;
     }
