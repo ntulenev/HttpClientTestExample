@@ -37,7 +37,7 @@ public class ExampleTests
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => result = await testClass.GetContentLengthAsync(uri, cts.Token));
+            async () => result = await testClass.GetContentLengthAsync(uri, cts.Token).ConfigureAwait(false));
 
         // Assert
         exception.Should().BeNull();
@@ -88,7 +88,7 @@ public class ExampleTests
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => await testClass.GetContentLengthAsync(uri, cts.Token));
+            async () => await testClass.GetContentLengthAsync(uri, cts.Token).ConfigureAwait(false));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -102,12 +102,12 @@ public class ExampleTests
         var handlerMoq = new Mock<HttpMessageHandler>(MockBehavior.Strict);
         var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
-        string uri = string.Empty;
+        var uri = string.Empty;
         using var cts = new CancellationTokenSource();
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => await testClass.GetContentLengthAsync(uri, cts.Token));
+            async () => await testClass.GetContentLengthAsync(uri, cts.Token).ConfigureAwait(false));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -122,11 +122,11 @@ public class ExampleTests
         var client = new HttpClient(handlerMoq.Object);
         var testClass = new ClassForTest(client);
         using var cts = new CancellationTokenSource();
-        string uri = "     ";
+        var uri = "     ";
 
         // Act
         var exception = await Record.ExceptionAsync(
-            async () => await testClass.GetContentLengthAsync(uri, cts.Token));
+            async () => await testClass.GetContentLengthAsync(uri, cts.Token).ConfigureAwait(false));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
